@@ -1,0 +1,3 @@
+SELECT COUNT(DISTINCT Category)
+FROM ItemCategory
+WHERE ItemID IN (SELECT ItemID FROM Bid WHERE Amount > 100);

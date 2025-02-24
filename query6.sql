@@ -1,0 +1,3 @@
+SELECT COUNT(DISTINCT UserID)
+FROM User
+WHERE IsSeller = 1 AND IsBidder = 1;

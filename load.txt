@@ -25,5 +25,6 @@ SET IsBidder = 1 WHERE IsBidder = 'True';
 UPDATE User
 SET IsBidder = 0 WHERE IsBidder = 'False';
 
-.separator |
 .import bids.dat Bid
+
+.import ItemCategory.dat ItemCategory

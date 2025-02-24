@@ -32,6 +32,7 @@ columnSeparator = "|"
 bidID = 0
 items_set = set()
 users_dict = {}
+bids_set = set()
 
 # Dictionary of months used for date transformation
 MONTHS = {'Jan':'01','Feb':'02','Mar':'03','Apr':'04','May':'05','Jun':'06',\
@@ -71,6 +72,10 @@ def transformDollar(money):
         return money
     return sub(r'[^\d.]', '', money)
 
+def escaped(s):
+    s = s.replace('"', '""')
+    return '"' + s + '"'
+
 """
 Parses a single json file. Currently, there's a loop that iterates over each
 item in the data set. Your job is to extend this functionality to create all
@@ -87,20 +92,22 @@ def parseJson(json_file):
             items_set.add(item["ItemID"])
             with open("items.dat", "a") as item_file, open("bids.dat", "a") as bid_file, open("ItemCategory.dat", "a") as item_category_file:
                 for category in item["Category"]:
-                    item_category_file.write(item["ItemID"] + columnSeparator + category + '\n')
+                    bid_info = item["ItemID"] + columnSeparator + category
+                    if bid_info not in bids_set:
+                        bids_set.add(bid_info)
+                        item_category_file.write(bid_info + '\n')
+
+                item["Buy_Price"] = transformDollar(item["Buy_Price"]) if "Buy_Price" in item else "NULL"
+                item["First_Bid"] = transformDollar(item["First_Bid"]) if "First_Bid" in item else "NULL"
+                item["Currently"] = transformDollar(item["Currently"]) if "Currently" in item else "NULL"
+                item["Started"] = transformDttm(item["Started"]) if "Started" in item else "NULL"
+                item["Ends"] = transformDttm(item["Ends"]) if "Ends" in item else "NULL"
+
                 for attribute in item_attributes:
-                    if attribute not in item.keys():
+                    if attribute not in item or item[attribute] is None:
                         item[attribute] = "NULL"
-
-                item["Buy_Price"] = transformDollar(item["Buy_Price"]) if item["Buy_Price"] != "NULL" else "NULL"
-                item["First_Bid"] = transformDollar(item["First_Bid"]) if item["First_Bid"] != "NULL" else "NULL"
-                item["Currently"] = transformDollar(item["Currently"]) if item["Currently"] != "NULL" else "NULL"
-                item["Started"] = transformDttm(item["Started"]) if item["First_Bid"] != "NULL" else "NULL"
-                item["Ends"] = transformDttm(item["Ends"]) if item["First_Bid"] != "NULL" else "NULL"
-
-                for attribute in item_attributes:
-                    item_file.write(str(item[attribute]) + columnSeparator)
-                item_file.write(item["Seller"]["UserID"] + '\n')
+                
+                item_file.write(item["ItemID"] + columnSeparator + escaped(item["Name"]) + columnSeparator + item["Currently"] + columnSeparator + item["Buy_Price"] + columnSeparator + item["First_Bid"] + columnSeparator + item["Number_of_Bids"] + columnSeparator + item["Started"] + columnSeparator + item["Ends"] + columnSeparator + escaped(item["Description"]) + columnSeparator + escaped(item["Seller"]["UserID"])+ "\n")
                 
                 userID = item["Seller"]["UserID"]
                 if userID not in users_dict:
@@ -134,9 +141,6 @@ def parseJson(json_file):
                         users_dict[bidder["UserID"]]["IsBidder"] = "True"
                         if "IsSeller" not in users_dict[bidder["UserID"]]:
                             users_dict[bidder["UserID"]]["IsSeller"] = "False"
-                    
-
-
 
 
 """
@@ -154,8 +158,7 @@ def main(argv):
             print ("Success parsing " + f)
     with open("users.dat", "a") as users_file:
         for user in users_dict:
-            user_info = str(users_dict[user]["UserID"]) + columnSeparator + str(users_dict[user]["Rating"]) + columnSeparator + str(users_dict[user]["Location"])+ columnSeparator + str(users_dict[user]["Country"]) + columnSeparator + users_dict[user]["IsSeller"] + columnSeparator + users_dict[user]["IsBidder"] + "\n"
-            print(user_info)
+            user_info = escaped(users_dict[user]["UserID"]) + columnSeparator + users_dict[user]["Rating"] + columnSeparator + escaped(users_dict[user]["Location"])+ columnSeparator + escaped(users_dict[user]["Country"]) + columnSeparator + users_dict[user]["IsSeller"] + columnSeparator + users_dict[user]["IsBidder"] + "\n"
             users_file.write(user_info)
 
 if __name__ == '__main__':

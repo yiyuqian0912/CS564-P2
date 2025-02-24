@@ -1,0 +1,3 @@
+SELECT COUNT(*)
+FROM User
+WHERE Rating > 1000 AND IsSeller = 1;
