@@ -4,7 +4,6 @@
 UPDATE Item 
 SET Buy_Price = NULL WHERE Buy_Price = 'NULL';
 
-.separator |
 .import users.dat User
 
 UPDATE User
