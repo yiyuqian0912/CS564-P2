@@ -4,6 +4,7 @@
 UPDATE Item 
 SET Buy_Price = NULL WHERE Buy_Price = 'NULL';
 
+.separator |
 .import users.dat User
 
 UPDATE User
@@ -24,4 +25,5 @@ SET IsBidder = 1 WHERE IsBidder = 'True';
 UPDATE User
 SET IsBidder = 0 WHERE IsBidder = 'False';
 
+.separator |
 .import bids.dat Bid
