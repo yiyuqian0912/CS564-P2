@@ -1,0 +1,27 @@
+.separator |
+.import items.dat Item
+
+UPDATE Item 
+SET Buy_Price = NULL WHERE Buy_Price = 'NULL';
+
+.import users.dat User
+
+UPDATE User
+SET Location = NULL WHERE Location = 'NULL';
+
+UPDATE User
+SET Country = NULL WHERE Country = 'NULL';
+
+UPDATE User
+SET IsSeller = 1 WHERE IsSeller = 'True';
+
+UPDATE User
+SET IsSeller = 0 WHERE IsSeller = 'False';
+
+UPDATE User
+SET IsBidder = 1 WHERE IsBidder = 'True';
+
+UPDATE User
+SET IsBidder = 0 WHERE IsBidder = 'False';
+
+.import bids.dat Bid
