@@ -1,0 +1,140 @@
+{
+	"$schema": "schema for Auction database", 
+	"title": "Auction Database",
+	"description": "Schema for the auction system including Items, Bids, Users, and Categories.",
+	"type": "object",
+	"items": {
+		"title": "Item",
+		"type": "object",
+		"properties": {
+			"ItemID": {
+				"description": "an identifier unique across all items (Primary Key)", 
+				"type": "number"
+			},
+			"Name": {
+				"description": "A short item description used as the auction's title.", 
+				"type": "string"
+			},
+			"Currently": {
+				"description": "The current highest bid. This amount is always equal to the
+								amount of the highest bid, or First_Bid if there are no bids.",
+				"type": "number"
+			},
+			"Buy_Price": {
+				"description": "The price, chosen by the seller before the auction starts, at
+                                which a bidder can win the auction immediately.
+                                The seller may choose not to set such a price, in 
+                                which case the element would be missing.", 
+				"type": "number", 
+				"minimum": 0
+			},
+			"First_Bid": {
+				"description": "The minimum qualifying first-bid amount, as determined by the
+								seller before the auction starts. It does not mean there is a bid
+								at all.", 
+				"type": "number"
+			},
+			"Number_of_Bids": {
+				"description": "Number of Bids/Bid elements, each corresponding to a bid for a particular item.", 
+				"type": "number"
+			},
+			"Started": {
+				"description": "Auction start time", 
+				"type": "string"
+			},
+			"Ends": {
+				"description": "Auction end time. If this is in the past with respect to the current
+								system time, the auction is closed. If in the future, the auction is
+								still open.", 
+				"type": "string"
+			},
+			"SellerID": {
+				"description": "Attributes give the seller's UserID and rating. (Foreign Key -> UserID)", 
+				"type": "string",
+			},
+			"Description": {
+				"description": "the item's full description",
+				"type": "string"
+			}
+		},
+	}
+    "ItemCategory": {
+		"title": "Category",
+		"type": "object",
+		"properties": {
+            "Category": {
+    		"description":  "The name of a category to which the item belongs. An item may belong to
+						multiple categories (Primary Key in tuple form: (ItemID, Category))",
+    		"type": "string"
+            },
+            "ItemID": {
+    		"description":  "unique id for an item across all categories (Foreign Key -> IteItemID)",
+    		"type": "string"
+            }
+    	},
+    }
+    "Bid": {
+		"description": "Bids placed on the item", 
+		"type": "object", 
+		"items": {
+			"title": "Bid",
+			"type": "object",
+			"properties": {
+				"UserID": {
+    				"description": "Attribute UserID uniquely identifies a user. (Foreign Key -> UserID)",
+    				"type": "object"
+				}
+                "BidID": {
+    				"description": "Attribute BidID uniquely identifies a bid. (Primary Key)",
+    				"type": "object"
+				}
+                "ItemID": {
+					"description": "Attribute ItemID uniquely identifies an item being bid on. (Foreign Key -> ItemID)",
+					"type": "number"
+				},
+				"Time": {
+    				"description": "Time of bid",
+						"type": "string"
+				},
+				"Amount": {
+					"description": "Amount of bid",
+					"type": "number"
+				},
+            }
+        }
+    }
+    "Users": {
+		"title": "User",
+		"type": "object",
+		"properties": {
+            "Location": {
+				"description": "Location of bidder",
+				"type": "string",
+				"minimum": 0
+			},
+    		"Country": {
+				"description": "Country of bidder",
+				"type": "string",
+				"minimum": 0
+			},
+			"UserID": {
+				"description": "unique id for a user across all users (Primary Key)",
+				"type": "string"
+			},
+			"Rating": {
+				"description": "User's rating",
+				"type": "number"
+			}
+            "IsBidder": {
+				"description": "Indicates if the user is a bidder",
+				"type": "boolean"
+			}
+            "IsSeller": {
+				"description": "Indicates if the user is a seller",
+				"type": "boolean"
+			}
+    	},
+    }
+}
+
+				
