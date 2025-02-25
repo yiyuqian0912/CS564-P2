@@ -1,7 +1,7 @@
 {
 	"$schema": "schema for Auction database", 
 	"title": "Auction Database",
-	"description": "Schema for the auction system including Items, Bids, Users, and Categories.",
+	"description": "Schema for the auction system including Items, Bids, Users, and ItemCategory.",
 	"type": "object",
 	"items": {
 		"title": "Item",
